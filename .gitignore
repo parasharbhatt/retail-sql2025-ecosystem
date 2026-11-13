@@ -1,0 +1,24 @@
+gitignore
+# Ignore Archive folder
+Archive/
+archive/
+
+# Environment & local secrets
+.env
+.env.*
+*.secret
+
+# VS Code & SQL Server local workspace files
+.vscode/*
+!.vscode/extensions.json
+*.user
+*.suo
+*.dbmdl
+*.jfm
+
+# OS & temporary files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
