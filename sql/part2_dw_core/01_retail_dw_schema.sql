@@ -1,15 +1,21 @@
 -- ============================================================================
 -- PART 2: TASK-2 DW CORE LAYER (Retail_DW, Logging, Watermarks, SCD2, Indexes)
 -- ============================================================================
-IF DB_ID('Retail_DW') IS NULL
+USE master;
+GO
+
+IF DB_ID('Retail_DW') IS NOT NULL
 BEGIN
-    CREATE DATABASE Retail_DW;
+    ALTER DATABASE Retail_DW SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE Retail_DW;
 END;
+GO
+
+CREATE DATABASE Retail_DW;
 GO
 
 USE Retail_DW;
 GO
-
 -- (ii) Centralized Execution Error Logging Engine
 IF OBJECT_ID('dbo.ETL_Error_Log', 'U') IS NULL
 CREATE TABLE ETL_Error_Log (

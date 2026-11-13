@@ -1,10 +1,17 @@
 -- ============================================================================
 -- PART 1: TASK-1 OLTP LAYER (Retail_OLTP)
 -- ============================================================================
-IF DB_ID('Retail_OLTP') IS NULL
+USE master;
+GO
+
+IF DB_ID('Retail_OLTP') IS NOT NULL
 BEGIN
-    CREATE DATABASE Retail_OLTP;
+    ALTER DATABASE Retail_OLTP SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE Retail_OLTP;
 END;
+GO
+
+CREATE DATABASE Retail_OLTP;
 GO
 
 USE Retail_OLTP;
@@ -74,19 +81,32 @@ BEGIN
 END;
 GO
 
--- (iv) Generate 3 Years of Transactional History (~1,500 Orders)
+-- (iv) Generate 3 Years of Transactional History (~1,500 Orders) with realistic ListPrice lookup
 DECLARE @StartDate DATE = DATEADD(YEAR, -3, CAST(SYSUTCDATETIME() AS DATE));
 DECLARE @CurrentDate DATE = @StartDate;
+
 WHILE @CurrentDate <= CAST(SYSUTCDATETIME() AS DATE)
 BEGIN
-    IF RAND() > 0.3 -- Randomly skip some days to look like natural retail patterns
+    IF RAND() > 0.3
     BEGIN
-        INSERT INTO SalesHeader (OrderDate, CustomerID)
+        DECLARE @OrderID INT;
+        DECLARE @ProductID INT = CAST((RAND() * 99) + 1 AS INT);
+        DECLARE @ProductListPrice DECIMAL(18,2);
+
+        -- Fetch the product's actual ListPrice
+        SELECT @ProductListPrice = ListPrice
+        FROM dbo.Products
+        WHERE ProductID = @ProductID;
+
+        INSERT INTO dbo.SalesHeader (OrderDate, CustomerID)
         VALUES (@CurrentDate, CAST((RAND() * 99) + 1 AS INT));
 
-        INSERT INTO SalesDetail (OrderID, ProductID, Quantity, UnitPrice)
-        VALUES (SCOPE_IDENTITY(), CAST((RAND() * 99) + 1 AS INT), CAST((RAND() * 3) + 1 AS INT), 50.00);
+        SET @OrderID = SCOPE_IDENTITY();
+
+        INSERT INTO dbo.SalesDetail (OrderID, ProductID, Quantity, UnitPrice)
+        VALUES (@OrderID, @ProductID, CAST((RAND() * 3) + 1 AS INT), @ProductListPrice);
     END;
     SET @CurrentDate = DATEADD(DAY, 1, @CurrentDate);
 END;
 GO
+
