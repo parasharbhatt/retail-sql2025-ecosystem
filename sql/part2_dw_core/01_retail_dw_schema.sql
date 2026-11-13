@@ -18,7 +18,7 @@ USE Retail_DW;
 GO
 -- (ii) Centralized Execution Error Logging Engine
 IF OBJECT_ID('dbo.ETL_Error_Log', 'U') IS NULL
-CREATE TABLE ETL_Error_Log (
+CREATE TABLE dbo.ETL_Error_Log (
     LogID INT IDENTITY(1,1) PRIMARY KEY,
     ProcedureName NVARCHAR(100),
     ErrorNumber INT,
@@ -31,7 +31,7 @@ CREATE TABLE ETL_Error_Log (
 
 -- (iii) High-Water Mark Tracking Table for Incremental Ingestion
 IF OBJECT_ID('dbo.DW_Watermarks', 'U') IS NULL
-CREATE TABLE DW_Watermarks (
+CREATE TABLE dbo.DW_Watermarks (
     TableName VARCHAR(100) PRIMARY KEY,
     LastRunDateTime DATETIME2 NOT NULL
 );
@@ -50,7 +50,7 @@ GO
 
 -- (iv) Dimension and Fact Tables
 IF OBJECT_ID('dbo.DimCustomers', 'U') IS NULL
-CREATE TABLE DimCustomers (
+CREATE TABLE dbo.DimCustomers (
     CustomerKey INT IDENTITY(1,1) PRIMARY KEY,
     CustomerID INT, -- Business Key
     CustomerName NVARCHAR(100),
@@ -62,7 +62,7 @@ CREATE TABLE DimCustomers (
 );
 
 IF OBJECT_ID('dbo.DimProducts', 'U') IS NULL
-CREATE TABLE DimProducts (
+CREATE TABLE dbo.DimProducts (
     ProductKey INT IDENTITY(1,1) PRIMARY KEY,
     ProductID INT, -- Business Key
     ProductName NVARCHAR(100),
@@ -74,11 +74,12 @@ CREATE TABLE DimProducts (
 );
 
 IF OBJECT_ID('dbo.FactSales', 'U') IS NULL
-CREATE TABLE FactSales (
+CREATE TABLE dbo.FactSales (
     SalesKey INT IDENTITY(1,1) PRIMARY KEY,
     OrderDetailID INT, -- Line item operational tracking check
     OrderID INT,
-    OrderDate DATE,
+    OrderDateTimeUtc DATETIME2(7) NOT NULL,
+    OrderDate AS CONVERT(DATE, OrderDateTimeUtc) PERSISTED,
     CustomerKey INT FOREIGN KEY REFERENCES DimCustomers(CustomerKey), -- SCD2 Link
     ProductKey INT FOREIGN KEY REFERENCES DimProducts(ProductKey),   -- SCD2 Link
     Quantity INT,
@@ -89,9 +90,9 @@ GO
 
 -- Critical Indexing Infrastructure for Lookup Optimizations
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DimCustomers_Lookup' AND object_id = OBJECT_ID('dbo.DimCustomers'))
-    CREATE NONCLUSTERED INDEX IX_DimCustomers_Lookup ON DimCustomers (CustomerID, ValidFrom, ValidTo);
+    CREATE NONCLUSTERED INDEX IX_DimCustomers_Lookup ON dbo.DimCustomers (CustomerID, ValidFrom, ValidTo);
 
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_DimProducts_Lookup' AND object_id = OBJECT_ID('dbo.DimProducts'))
-    CREATE NONCLUSTERED INDEX IX_DimProducts_Lookup ON DimProducts (ProductID, ValidFrom, ValidTo);
+    CREATE NONCLUSTERED INDEX IX_DimProducts_Lookup ON dbo.DimProducts (ProductID, ValidFrom, ValidTo);
 GO
 

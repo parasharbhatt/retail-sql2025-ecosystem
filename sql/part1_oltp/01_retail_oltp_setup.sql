@@ -19,41 +19,102 @@ GO
 
 -- (ii) Create OLTP Data Tables
 IF OBJECT_ID('dbo.Customers', 'U') IS NULL
-CREATE TABLE Customers (
+CREATE TABLE dbo.Customers (
     CustomerID INT IDENTITY(1,1) PRIMARY KEY,
     CustomerName NVARCHAR(100),
     City NVARCHAR(50),
     Region NVARCHAR(50),
-    LastModified DATETIME2 DEFAULT SYSUTCDATETIME()
+    LastModified DATETIME2(7) NOT NULL CONSTRAINT DF_Customers_LastModified DEFAULT SYSUTCDATETIME()
 );
 
 IF OBJECT_ID('dbo.Products', 'U') IS NULL
-CREATE TABLE Products (
+CREATE TABLE dbo.Products (
     ProductID INT IDENTITY(1,1) PRIMARY KEY,
     ProductName NVARCHAR(100),
     Category NVARCHAR(50),
     StandardCost DECIMAL(18,2),
     ListPrice DECIMAL(18,2),
-    LastModified DATETIME2 DEFAULT SYSUTCDATETIME()
+    LastModified DATETIME2(7) NOT NULL CONSTRAINT DF_Products_LastModified DEFAULT SYSUTCDATETIME()
 );
 
 IF OBJECT_ID('dbo.SalesHeader', 'U') IS NULL
-CREATE TABLE SalesHeader (
+CREATE TABLE dbo.SalesHeader (
     OrderID INT IDENTITY(1,1) PRIMARY KEY,
-    OrderDate DATE,
+    OrderDateTimeUtc DATETIME2(7) NOT NULL,
+    OrderDate AS CONVERT(DATE, OrderDateTimeUtc) PERSISTED,
     CustomerID INT FOREIGN KEY REFERENCES Customers(CustomerID),
-    LastModified DATETIME2 DEFAULT SYSUTCDATETIME()
+    LastModified DATETIME2(7) NOT NULL CONSTRAINT DF_SalesHeader_LastModified DEFAULT SYSUTCDATETIME()
 );
 
 IF OBJECT_ID('dbo.SalesDetail', 'U') IS NULL
-CREATE TABLE SalesDetail (
+CREATE TABLE dbo.SalesDetail (
     OrderDetailID INT IDENTITY(1,1) PRIMARY KEY,
     OrderID INT FOREIGN KEY REFERENCES SalesHeader(OrderID),
     ProductID INT FOREIGN KEY REFERENCES Products(ProductID),
     Quantity INT,
     UnitPrice DECIMAL(18,2),
-    LastModified DATETIME2 DEFAULT SYSUTCDATETIME()
+    LastModified DATETIME2(7) NOT NULL CONSTRAINT DF_SalesDetail_LastModified DEFAULT SYSUTCDATETIME()
 );
+GO
+
+CREATE OR ALTER TRIGGER dbo.trg_Customers_SetLastModified
+ON dbo.Customers
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF UPDATE(LastModified) RETURN;
+
+    UPDATE c
+    SET LastModified = SYSUTCDATETIME()
+    FROM dbo.Customers AS c
+    INNER JOIN inserted AS i ON i.CustomerID = c.CustomerID;
+END;
+GO
+
+CREATE OR ALTER TRIGGER dbo.trg_Products_SetLastModified
+ON dbo.Products
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF UPDATE(LastModified) RETURN;
+
+    UPDATE p
+    SET LastModified = SYSUTCDATETIME()
+    FROM dbo.Products AS p
+    INNER JOIN inserted AS i ON i.ProductID = p.ProductID;
+END;
+GO
+
+CREATE OR ALTER TRIGGER dbo.trg_SalesHeader_SetLastModified
+ON dbo.SalesHeader
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF UPDATE(LastModified) RETURN;
+
+    UPDATE h
+    SET LastModified = SYSUTCDATETIME()
+    FROM dbo.SalesHeader AS h
+    INNER JOIN inserted AS i ON i.OrderID = h.OrderID;
+END;
+GO
+
+CREATE OR ALTER TRIGGER dbo.trg_SalesDetail_SetLastModified
+ON dbo.SalesDetail
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF UPDATE(LastModified) RETURN;
+
+    UPDATE d
+    SET LastModified = SYSUTCDATETIME()
+    FROM dbo.SalesDetail AS d
+    INNER JOIN inserted AS i ON i.OrderDetailID = d.OrderDetailID;
+END;
 GO
 
 -- (iii) Add 100 records for Customers and Products Table
@@ -84,6 +145,7 @@ GO
 -- (iv) Generate 3 Years of Transactional History (~1,500 Orders) with realistic ListPrice lookup
 DECLARE @StartDate DATE = DATEADD(YEAR, -3, CAST(SYSUTCDATETIME() AS DATE));
 DECLARE @CurrentDate DATE = @StartDate;
+DECLARE @OrderDateTimeUtc DATETIME2(7);
 
 WHILE @CurrentDate <= CAST(SYSUTCDATETIME() AS DATE)
 BEGIN
@@ -98,8 +160,14 @@ BEGIN
         FROM dbo.Products
         WHERE ProductID = @ProductID;
 
-        INSERT INTO dbo.SalesHeader (OrderDate, CustomerID)
-        VALUES (@CurrentDate, CAST((RAND() * 99) + 1 AS INT));
+        SET @OrderDateTimeUtc = DATEADD(
+            SECOND,
+            CAST(RAND() * 86400 AS INT),
+            CONVERT(DATETIME2(7), @CurrentDate)
+        );
+
+        INSERT INTO dbo.SalesHeader (OrderDateTimeUtc, CustomerID)
+        VALUES (@OrderDateTimeUtc, CAST((RAND() * 99) + 1 AS INT));
 
         SET @OrderID = SCOPE_IDENTITY();
 
