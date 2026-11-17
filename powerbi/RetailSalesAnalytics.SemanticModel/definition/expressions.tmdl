@@ -1,3 +1,10 @@
 expression Server = "PB_DELL_M18" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 91c2adef-8eaf-40bc-862c-fb3317b05021
+
+	annotation PBI_ResultType = Text
 
 expression Database = "Retail_DW" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: ae307691-3201-4f68-99c8-951d8a494369
+
+	annotation PBI_ResultType = Text
+

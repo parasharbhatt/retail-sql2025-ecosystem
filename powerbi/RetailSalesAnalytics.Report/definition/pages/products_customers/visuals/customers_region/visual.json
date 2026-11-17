@@ -1,7 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "customers_region",
-  "position": { "x": 24, "y": 350, "z": 0, "height": 300, "width": 600 },
+  "position": {
+    "x": 24,
+    "y": 350,
+    "z": 0,
+    "height": 300,
+    "width": 600
+  },
   "visual": {
     "visualType": "clusteredBarChart",
     "query": {
@@ -9,15 +15,34 @@
         "Category": {
           "projections": [
             {
-              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "DimCustomers" } }, "Property": "Region" } },
-              "queryRef": "DimCustomers.Region"
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimCustomers"
+                    }
+                  },
+                  "Property": "Region"
+                }
+              },
+              "queryRef": "DimCustomers.Region",
+              "active": true
             }
           ]
         },
         "Y": {
           "projections": [
             {
-              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "all_measures" } }, "Property": "Active Customers" } },
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "all_measures"
+                    }
+                  },
+                  "Property": "Active Customers"
+                }
+              },
               "queryRef": "all_measures.Active Customers"
             }
           ]

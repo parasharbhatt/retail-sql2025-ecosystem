@@ -1,57 +1,66 @@
 table DimProducts
-    lineageTag: e74b0726-7422-4c8f-a676-00bf36d75368
+	lineageTag: e74b0726-7422-4c8f-a676-00bf36d75368
 
-    column ProductKey
-        dataType: int64
-        isKey
-        isHidden
-        sourceColumn: ProductKey
-        summarizeBy: none
+	column ProductKey
+		dataType: int64
+		isHidden
+		isKey
+		lineageTag: 81bd28f6-b41e-48a4-adff-2f5b46cfd619
+		summarizeBy: none
+		sourceColumn: ProductKey
 
-    column ProductID
-        dataType: int64
-        sourceColumn: ProductID
-        summarizeBy: none
+	column ProductID
+		dataType: int64
+		lineageTag: ec33d588-4f7e-49d4-bb06-3c92bc4ff670
+		summarizeBy: none
+		sourceColumn: ProductID
 
-    column ProductName
-        dataType: string
-        sourceColumn: ProductName
-        summarizeBy: none
+	column ProductName
+		dataType: string
+		lineageTag: fea8764c-d818-4c93-9a66-5306255e3669
+		summarizeBy: none
+		sourceColumn: ProductName
 
-    column Category
-        dataType: string
-        sourceColumn: Category
-        summarizeBy: none
+	column Category
+		dataType: string
+		lineageTag: 75d7ff75-85a2-444b-80bc-499f26c3cb22
+		summarizeBy: none
+		sourceColumn: Category
 
-    column ListPrice
-        dataType: decimal
-        formatString: $#,0.00
-        sourceColumn: ListPrice
-        summarizeBy: none
+	column ListPrice
+		dataType: double
+		formatString: $#,0.00
+		lineageTag: dc0661b1-f932-40fc-a87d-ae14570d64dc
+		summarizeBy: none
+		sourceColumn: ListPrice
 
-    column ValidFrom
-        dataType: dateTime
-        isHidden
-        sourceColumn: ValidFrom
-        summarizeBy: none
+	column ValidFrom
+		dataType: dateTime
+		isHidden
+		lineageTag: 6a84115d-d7c7-44a4-b323-1a387b16b7f3
+		summarizeBy: none
+		sourceColumn: ValidFrom
 
-    column ValidTo
-        dataType: dateTime
-        isHidden
-        sourceColumn: ValidTo
-        summarizeBy: none
+	column ValidTo
+		dataType: dateTime
+		isHidden
+		lineageTag: c785cda4-b3e2-4b16-8bef-a82c5b44901b
+		summarizeBy: none
+		sourceColumn: ValidTo
 
-    column IsCurrent
-        dataType: boolean
-        isHidden
-        sourceColumn: IsCurrent
-        summarizeBy: none
+	column IsCurrent
+		dataType: boolean
+		isHidden
+		lineageTag: b1975557-72d1-4e72-89b8-d7f00b29cd4f
+		summarizeBy: none
+		sourceColumn: IsCurrent
 
-    partition DimProducts = m
-        mode: import
-        source =
-            let
-                Source = Sql.Database(Server, Database, [CreateNavigationProperties=false]),
-                dbo_DimProducts = Source{[Schema="dbo", Item="DimProducts"]}[Data]
-            in
-                dbo_DimProducts
+	partition DimProducts = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(Server, Database, [CreateNavigationProperties=false]),
+				    dbo_DimProducts = Source{[Schema="dbo", Item="DimProducts"]}[Data]
+				in
+				    dbo_DimProducts
+

@@ -1,7 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "sales_trend",
-  "position": { "x": 24, "y": 170, "z": 0, "height": 250, "width": 760 },
+  "position": {
+    "x": 24,
+    "y": 170,
+    "z": 0,
+    "height": 250,
+    "width": 760
+  },
   "visual": {
     "visualType": "lineChart",
     "query": {
@@ -9,15 +15,34 @@
         "Category": {
           "projections": [
             {
-              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "DimDate" } }, "Property": "MonthYear" } },
-              "queryRef": "DimDate.MonthYear"
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimDate"
+                    }
+                  },
+                  "Property": "MonthYear"
+                }
+              },
+              "queryRef": "DimDate.MonthYear",
+              "active": true
             }
           ]
         },
         "Y": {
           "projections": [
             {
-              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "all_measures" } }, "Property": "Sales Amount" } },
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "all_measures"
+                    }
+                  },
+                  "Property": "Sales Amount"
+                }
+              },
               "queryRef": "all_measures.Sales Amount"
             }
           ]

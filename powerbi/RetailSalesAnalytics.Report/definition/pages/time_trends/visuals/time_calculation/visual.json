@@ -1,7 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "time_calculation",
-  "position": { "x": 24, "y": 24, "z": 0, "height": 100, "width": 300 },
+  "position": {
+    "x": 24,
+    "y": 24,
+    "z": 0,
+    "height": 100,
+    "width": 300
+  },
   "visual": {
     "visualType": "slicer",
     "query": {
@@ -9,12 +15,40 @@
         "Values": {
           "projections": [
             {
-              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "Time Intelligence" } }, "Property": "Time Calculation" } },
-              "queryRef": "Time Intelligence.Time Calculation"
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Time Intelligence"
+                    }
+                  },
+                  "Property": "Time Calculation"
+                }
+              },
+              "queryRef": "Time Intelligence.Time Calculation",
+              "active": true
             }
           ]
         }
       }
     }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "e3f6d44f93044e79cc38",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Time Intelligence"
+              }
+            },
+            "Property": "Time Calculation"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
   }
 }

@@ -1,2 +1,3 @@
-database RetailSalesAnalytics
-    compatibilityLevel: 1600
+database
+	compatibilityLevel: 1606
+

@@ -1,7 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "sales_card",
-  "position": { "x": 24, "y": 24, "z": 0, "height": 120, "width": 290 },
+  "position": {
+    "x": 24,
+    "y": 24,
+    "z": 0,
+    "height": 120,
+    "width": 290
+  },
   "visual": {
     "visualType": "card",
     "query": {
@@ -9,7 +15,16 @@
         "Values": {
           "projections": [
             {
-              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "all_measures" } }, "Property": "Sales Amount" } },
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "all_measures"
+                    }
+                  },
+                  "Property": "Sales Amount"
+                }
+              },
               "queryRef": "all_measures.Sales Amount"
             }
           ]

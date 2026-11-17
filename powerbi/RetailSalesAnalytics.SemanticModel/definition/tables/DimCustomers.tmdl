@@ -1,56 +1,65 @@
 table DimCustomers
-    lineageTag: 9d8bd561-b787-45cf-b49d-9f35dfeb4034
+	lineageTag: 9d8bd561-b787-45cf-b49d-9f35dfeb4034
 
-    column CustomerKey
-        dataType: int64
-        isKey
-        isHidden
-        sourceColumn: CustomerKey
-        summarizeBy: none
+	column CustomerKey
+		dataType: int64
+		isHidden
+		isKey
+		lineageTag: cb41dd79-847a-4782-b5ac-839db42b5060
+		summarizeBy: none
+		sourceColumn: CustomerKey
 
-    column CustomerID
-        dataType: int64
-        sourceColumn: CustomerID
-        summarizeBy: none
+	column CustomerID
+		dataType: int64
+		lineageTag: 62cb141f-0233-4a76-9666-66662e1106d6
+		summarizeBy: none
+		sourceColumn: CustomerID
 
-    column CustomerName
-        dataType: string
-        sourceColumn: CustomerName
-        summarizeBy: none
+	column CustomerName
+		dataType: string
+		lineageTag: b36e4a7f-f72f-4a49-941f-8fec1db537d9
+		summarizeBy: none
+		sourceColumn: CustomerName
 
-    column City
-        dataType: string
-        sourceColumn: City
-        summarizeBy: none
+	column City
+		dataType: string
+		lineageTag: 8ca7151c-91d0-4c32-97f7-aad0b4e002c3
+		summarizeBy: none
+		sourceColumn: City
 
-    column Region
-        dataType: string
-        sourceColumn: Region
-        summarizeBy: none
+	column Region
+		dataType: string
+		lineageTag: 0358047e-a333-4080-bca2-bd3601d79939
+		summarizeBy: none
+		sourceColumn: Region
 
-    column ValidFrom
-        dataType: dateTime
-        isHidden
-        sourceColumn: ValidFrom
-        summarizeBy: none
+	column ValidFrom
+		dataType: dateTime
+		isHidden
+		lineageTag: affb60d9-5c1a-4e06-98c5-a234d50a7212
+		summarizeBy: none
+		sourceColumn: ValidFrom
 
-    column ValidTo
-        dataType: dateTime
-        isHidden
-        sourceColumn: ValidTo
-        summarizeBy: none
+	column ValidTo
+		dataType: dateTime
+		isHidden
+		lineageTag: 061d55b6-5f43-40f3-9300-8ac7d0855d79
+		summarizeBy: none
+		sourceColumn: ValidTo
 
-    column IsCurrent
-        dataType: boolean
-        isHidden
-        sourceColumn: IsCurrent
-        summarizeBy: none
+	column IsCurrent
+		dataType: boolean
+		isHidden
+		lineageTag: e3aa4bab-53a5-4470-aec6-8f3c21101d60
+		summarizeBy: none
+		sourceColumn: IsCurrent
 
-    partition DimCustomers = m
-        mode: import
-        source =
-            let
-                Source = Sql.Database(Server, Database, [CreateNavigationProperties=false]),
-                dbo_DimCustomers = Source{[Schema="dbo", Item="DimCustomers"]}[Data]
-            in
-                dbo_DimCustomers
+	partition DimCustomers = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(Server, Database, [CreateNavigationProperties=false]),
+				    dbo_DimCustomers = Source{[Schema="dbo", Item="DimCustomers"]}[Data]
+				in
+				    dbo_DimCustomers
+

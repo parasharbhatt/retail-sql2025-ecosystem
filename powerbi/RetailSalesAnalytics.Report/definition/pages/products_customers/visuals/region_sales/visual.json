@@ -1,7 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "region_sales",
-  "position": { "x": 24, "y": 24, "z": 0, "height": 300, "width": 600 },
+  "position": {
+    "x": 24,
+    "y": 24,
+    "z": 0,
+    "height": 300,
+    "width": 600
+  },
   "visual": {
     "visualType": "clusteredColumnChart",
     "query": {
@@ -9,15 +15,34 @@
         "Category": {
           "projections": [
             {
-              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "DimCustomers" } }, "Property": "Region" } },
-              "queryRef": "DimCustomers.Region"
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimCustomers"
+                    }
+                  },
+                  "Property": "Region"
+                }
+              },
+              "queryRef": "DimCustomers.Region",
+              "active": true
             }
           ]
         },
         "Y": {
           "projections": [
             {
-              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "all_measures" } }, "Property": "Sales Amount" } },
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "all_measures"
+                    }
+                  },
+                  "Property": "Sales Amount"
+                }
+              },
               "queryRef": "all_measures.Sales Amount"
             }
           ]

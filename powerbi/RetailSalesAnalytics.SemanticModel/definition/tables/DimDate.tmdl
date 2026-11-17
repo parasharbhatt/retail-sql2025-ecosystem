@@ -1,66 +1,76 @@
 table DimDate
-    lineageTag: 0aa11f79-aef1-4e9e-816f-9f14083ecac4
-    dataCategory: Time
+	lineageTag: 0aa11f79-aef1-4e9e-816f-9f14083ecac4
+	dataCategory: Time
 
-    column Date
-        dataType: dateTime
-        isKey
-        formatString: mmmm d, yyyy
-        sourceColumn: Date
-        summarizeBy: none
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: mmmm d, yyyy
+		lineageTag: 7b427b22-9d2a-45a7-8741-1dd909530da1
+		summarizeBy: none
+		sourceColumn: Date
 
-    column Year
-        dataType: int64
-        formatString: 0
-        sourceColumn: Year
-        summarizeBy: none
+		annotation UnderlyingDateTimeDataType = Date
 
-    column Quarter
-        dataType: string
-        sourceColumn: Quarter
-        summarizeBy: none
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 9265e301-50de-45a3-809f-41f03ffb38b1
+		summarizeBy: none
+		sourceColumn: Year
 
-    column Month
-        dataType: string
-        sourceColumn: Month
-        sortByColumn: MonthNumber
-        summarizeBy: none
+	column Quarter
+		dataType: string
+		lineageTag: 6109cdd0-ecc0-4b9a-baff-3805da167ad3
+		summarizeBy: none
+		sourceColumn: Quarter
 
-    column MonthNumber
-        dataType: int64
-        isHidden
-        formatString: 0
-        sourceColumn: MonthNumber
-        summarizeBy: none
+	column Month
+		dataType: string
+		lineageTag: 74f5bc5d-182a-4c73-af5f-dfd53c6f78fa
+		summarizeBy: none
+		sourceColumn: Month
+		sortByColumn: MonthNumber
 
-    column MonthYear
-        dataType: string
-        sourceColumn: MonthYear
-        sortByColumn: YearMonthKey
-        summarizeBy: none
+	column MonthNumber
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4164e907-247f-4921-a7b6-240a559b61b5
+		summarizeBy: none
+		sourceColumn: MonthNumber
 
-    column YearMonthKey
-        dataType: int64
-        isHidden
-        formatString: 0
-        sourceColumn: YearMonthKey
-        summarizeBy: none
+	column MonthYear
+		dataType: string
+		lineageTag: 6a842b62-5ed1-49b6-bfeb-7938b97c81a7
+		summarizeBy: none
+		sourceColumn: MonthYear
+		sortByColumn: YearMonthKey
 
-    partition DimDate = m
-        mode: import
-        source =
-            let
-                FirstDate = Date.From(List.Min(FactSales[OrderDate])),
-                LastDate = Date.From(List.Max(FactSales[OrderDate])),
-                DateCount = Duration.Days(LastDate - FirstDate) + 1,
-                Dates = List.Dates(FirstDate, DateCount, #duration(1, 0, 0, 0)),
-                DateTable = Table.FromList(Dates, Splitter.SplitByNothing(), {"Date"}),
-                TypedDate = Table.TransformColumnTypes(DateTable, {{"Date", type date}}),
-                AddYear = Table.AddColumn(TypedDate, "Year", each Date.Year([Date]), Int64.Type),
-                AddQuarter = Table.AddColumn(AddYear, "Quarter", each "Q" & Number.ToText(Date.QuarterOfYear([Date])), type text),
-                AddMonth = Table.AddColumn(AddQuarter, "Month", each Date.ToText([Date], "MMM", "en-US"), type text),
-                AddMonthNumber = Table.AddColumn(AddMonth, "MonthNumber", each Date.Month([Date]), Int64.Type),
-                AddMonthYear = Table.AddColumn(AddMonthNumber, "MonthYear", each Date.ToText([Date], "MMM yyyy", "en-US"), type text),
-                AddYearMonthKey = Table.AddColumn(AddMonthYear, "YearMonthKey", each Date.Year([Date]) * 100 + Date.Month([Date]), Int64.Type)
-            in
-                AddYearMonthKey
+	column YearMonthKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b58446dd-7c74-4a16-8545-86e18efecaab
+		summarizeBy: none
+		sourceColumn: YearMonthKey
+
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				    FirstDate = Date.From(List.Min(FactSales[OrderDate])),
+				    LastDate = Date.From(List.Max(FactSales[OrderDate])),
+				    DateCount = Duration.Days(LastDate - FirstDate) + 1,
+				    Dates = List.Dates(FirstDate, DateCount, #duration(1, 0, 0, 0)),
+				    DateTable = Table.FromList(Dates, Splitter.SplitByNothing(), {"Date"}),
+				    TypedDate = Table.TransformColumnTypes(DateTable, {{"Date", type date}}),
+				    AddYear = Table.AddColumn(TypedDate, "Year", each Date.Year([Date]), Int64.Type),
+				    AddQuarter = Table.AddColumn(AddYear, "Quarter", each "Q" & Number.ToText(Date.QuarterOfYear([Date])), type text),
+				    AddMonth = Table.AddColumn(AddQuarter, "Month", each Date.ToText([Date], "MMM", "en-US"), type text),
+				    AddMonthNumber = Table.AddColumn(AddMonth, "MonthNumber", each Date.Month([Date]), Int64.Type),
+				    AddMonthYear = Table.AddColumn(AddMonthNumber, "MonthYear", each Date.ToText([Date], "MMM yyyy", "en-US"), type text),
+				    AddYearMonthKey = Table.AddColumn(AddMonthYear, "YearMonthKey", each Date.Year([Date]) * 100 + Date.Month([Date]), Int64.Type)
+				in
+				    AddYearMonthKey
+

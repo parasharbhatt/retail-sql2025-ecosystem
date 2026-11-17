@@ -1,70 +1,89 @@
 table FactSales
-    lineageTag: 4b47ea44-1e9d-440a-8be8-99003c8b3b82
+	lineageTag: 4b47ea44-1e9d-440a-8be8-99003c8b3b82
 
-    column SalesKey
-        dataType: int64
-        isKey
-        isHidden
-        sourceColumn: SalesKey
-        summarizeBy: none
+	column SalesKey
+		dataType: int64
+		isHidden
+		isKey
+		lineageTag: 300b76f8-8dbb-41d4-8669-5bbd8253af48
+		summarizeBy: none
+		sourceColumn: SalesKey
 
-    column OrderDetailID
-        dataType: int64
-        isHidden
-        sourceColumn: OrderDetailID
-        summarizeBy: none
+	column OrderDetailID
+		dataType: int64
+		isHidden
+		lineageTag: 831346b1-f5fd-4078-a0b0-7aa18ee31369
+		summarizeBy: none
+		sourceColumn: OrderDetailID
 
-    column OrderID
-        dataType: int64
-        sourceColumn: OrderID
-        summarizeBy: none
+	column OrderID
+		dataType: int64
+		lineageTag: 20499fc6-05c0-4cab-a029-513dcf96871e
+		summarizeBy: none
+		sourceColumn: OrderID
 
-    column OrderDateTimeUtc
-        dataType: dateTime
-        isHidden
-        sourceColumn: OrderDateTimeUtc
-        summarizeBy: none
+	column OrderDateTimeUtc
+		dataType: dateTime
+		isHidden
+		lineageTag: 97e5291a-a125-4258-8590-d07322882bd1
+		summarizeBy: none
+		sourceColumn: OrderDateTimeUtc
 
-    column OrderDate
-        dataType: dateTime
-        formatString: m/d/yyyy
-        sourceColumn: OrderDate
-        summarizeBy: none
+	column OrderDate
+		dataType: dateTime
+		formatString: m/d/yyyy
+		lineageTag: 785d0735-db59-4995-9cbf-abd4ef5f31bd
+		summarizeBy: none
+		sourceColumn: OrderDate
 
-    column CustomerKey
-        dataType: int64
-        isHidden
-        sourceColumn: CustomerKey
-        summarizeBy: none
+		annotation UnderlyingDateTimeDataType = Date
 
-    column ProductKey
-        dataType: int64
-        isHidden
-        sourceColumn: ProductKey
-        summarizeBy: none
+	column CustomerKey
+		dataType: int64
+		isHidden
+		lineageTag: 6bf8333b-b28a-4604-8c5f-5118f2396441
+		summarizeBy: none
+		sourceColumn: CustomerKey
 
-    column Quantity
-        dataType: int64
-        sourceColumn: Quantity
-        summarizeBy: sum
+	column ProductKey
+		dataType: int64
+		isHidden
+		lineageTag: 954b0360-7b59-41c7-b748-0947050081d7
+		summarizeBy: none
+		sourceColumn: ProductKey
 
-    column UnitPrice
-        dataType: decimal
-        formatString: $#,0.00
-        sourceColumn: UnitPrice
-        summarizeBy: none
+	column Quantity
+		dataType: int64
+		lineageTag: 11646db0-2a0a-4c31-a8fb-5f1cb2c2a3b9
+		summarizeBy: sum
+		sourceColumn: Quantity
 
-    column SalesAmount
-        dataType: decimal
-        formatString: $#,0.00
-        sourceColumn: SalesAmount
-        summarizeBy: none
+	column UnitPrice
+		dataType: double
+		formatString: $#,0.00
+		lineageTag: 4a4ef716-85be-4e72-8eee-70a8ba3c3904
+		summarizeBy: sum
+		sourceColumn: UnitPrice
 
-    partition FactSales = m
-        mode: import
-        source =
-            let
-                Source = Sql.Database(Server, Database, [CreateNavigationProperties=false]),
-                dbo_FactSales = Source{[Schema="dbo", Item="FactSales"]}[Data]
-            in
-                dbo_FactSales
+		annotation SummarizationSetBy = Automatic
+
+	column SalesAmount
+		dataType: double
+		formatString: $#,0.00
+		lineageTag: 69eabbc5-4828-4959-b82a-a0d990484886
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactSales = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(Server, Database, [CreateNavigationProperties=false]),
+				    dbo_FactSales = Source{[Schema="dbo", Item="FactSales"]}[Data]
+				in
+				    dbo_FactSales
+
+	annotation PBI_ResultType = Table
+

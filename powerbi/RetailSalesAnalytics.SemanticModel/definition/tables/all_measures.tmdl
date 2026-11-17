@@ -1,56 +1,67 @@
 table all_measures
-    lineageTag: 7ed5ec68-5f5e-43f2-b022-0f38e48b87d7
+	lineageTag: 7ed5ec68-5f5e-43f2-b022-0f38e48b87d7
 
-    measure 'Sales Amount' = SUM(FactSales[SalesAmount])
-        formatString: $#,0.00
-        displayFolder: Basic Measures
+	measure 'Sales Amount' = SUM(FactSales[SalesAmount])
+		formatString: $#,0.00
+		displayFolder: Basic Measures
+		lineageTag: 1499fbd6-44ba-4975-a107-7537f32df2ea
 
-    measure 'Total Quantity' = SUM(FactSales[Quantity])
-        formatString: #,0
-        displayFolder: Basic Measures
+	measure 'Total Quantity' = SUM(FactSales[Quantity])
+		formatString: #,0
+		displayFolder: Basic Measures
+		lineageTag: c5f6a77b-603f-47d8-979a-a4a56978206c
 
-    measure Orders = DISTINCTCOUNT(FactSales[OrderID])
-        formatString: #,0
-        displayFolder: Basic Measures
+	measure Orders = DISTINCTCOUNT(FactSales[OrderID])
+		formatString: #,0
+		displayFolder: Basic Measures
+		lineageTag: efe7802c-4ce5-4a68-9bd7-1f35e6dbefce
 
-    measure 'Average Order Value' = DIVIDE([Sales Amount], [Orders])
-        formatString: $#,0.00
-        displayFolder: Basic Measures
+	measure 'Average Order Value' = DIVIDE([Sales Amount], [Orders])
+		formatString: $#,0.00
+		displayFolder: Basic Measures
+		lineageTag: e209583f-16c9-4e74-a8d1-b0de0b80420a
 
-    measure 'Average Selling Price' = DIVIDE([Sales Amount], [Total Quantity])
-        formatString: $#,0.00
-        displayFolder: Basic Measures
+	measure 'Average Selling Price' = DIVIDE([Sales Amount], [Total Quantity])
+		formatString: $#,0.00
+		displayFolder: Basic Measures
+		lineageTag: ab46fa79-591b-4fd9-ba8b-d0e654c19378
 
-    measure 'Active Customers' = DISTINCTCOUNT(DimCustomers[CustomerID])
-        formatString: #,0
-        displayFolder: Basic Measures
+	measure 'Active Customers' = DISTINCTCOUNT(DimCustomers[CustomerID])
+		formatString: #,0
+		displayFolder: Basic Measures
+		lineageTag: 1175b7ca-ea26-4a41-8513-622d6faacc6a
 
-    measure 'Sales Amount LY' = CALCULATE([Sales Amount], SAMEPERIODLASTYEAR(DimDate[Date]))
-        formatString: $#,0.00
-        displayFolder: Advanced Measures
+	measure 'Sales Amount LY' = CALCULATE([Sales Amount], SAMEPERIODLASTYEAR(DimDate[Date]))
+		formatString: $#,0.00
+		displayFolder: Advanced Measures
+		lineageTag: 720cf98e-5e9c-414e-bea9-85ce44ed5f33
 
-    measure 'Sales YoY Change' = [Sales Amount] - [Sales Amount LY]
-        formatString: $#,0.00
-        displayFolder: Advanced Measures
+	measure 'Sales YoY Change' = [Sales Amount] - [Sales Amount LY]
+		formatString: $#,0.00
+		displayFolder: Advanced Measures
+		lineageTag: b0c92535-e765-46a9-a549-64c791643a41
 
-    measure 'Sales YoY %' = DIVIDE([Sales YoY Change], [Sales Amount LY])
-        formatString: 0.0%;-0.0%;0.0%
-        displayFolder: Advanced Measures
+	measure 'Sales YoY %' = DIVIDE([Sales YoY Change], [Sales Amount LY])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Advanced Measures
+		lineageTag: 9c99b9a7-2a4c-40e8-a085-80f8d643e1d3
 
-    measure 'Sales YTD' = TOTALYTD([Sales Amount], DimDate[Date])
-        formatString: $#,0.00
-        displayFolder: Advanced Measures
+	measure 'Sales YTD' = TOTALYTD([Sales Amount], DimDate[Date])
+		formatString: $#,0.00
+		displayFolder: Advanced Measures
+		lineageTag: 4a54f654-40cd-4cce-806c-f9d4efaac57d
 
-    measure 'Orders YTD' = TOTALYTD([Orders], DimDate[Date])
-        formatString: #,0
-        displayFolder: Advanced Measures
+	measure 'Orders YTD' = TOTALYTD([Orders], DimDate[Date])
+		formatString: #,0
+		displayFolder: Advanced Measures
+		lineageTag: cc88d98a-0cc5-4f8f-acc8-2647d516a20e
 
-    column Placeholder
-        dataType: string
-        isHidden
-        sourceColumn: Placeholder
-        summarizeBy: none
+	column Placeholder
+		lineageTag: bdd02b5e-4dec-41b1-883a-f27af82cc086
+		isNameInferred
+		sourceColumn: [Placeholder]
 
-    partition all_measures = calculated
-        mode: import
-        source = ROW("Placeholder", "Measures")
+	partition all_measures = calculated
+		mode: import
+		source = ROW("Placeholder", "Measures")
+

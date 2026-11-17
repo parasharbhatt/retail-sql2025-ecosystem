@@ -1,7 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "monthly_comparison",
-  "position": { "x": 24, "y": 150, "z": 0, "height": 440, "width": 1232 },
+  "position": {
+    "x": 24,
+    "y": 150,
+    "z": 0,
+    "height": 440,
+    "width": 1232
+  },
   "visual": {
     "visualType": "lineChart",
     "query": {
@@ -9,19 +15,47 @@
         "Category": {
           "projections": [
             {
-              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "DimDate" } }, "Property": "MonthYear" } },
-              "queryRef": "DimDate.MonthYear"
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DimDate"
+                    }
+                  },
+                  "Property": "MonthYear"
+                }
+              },
+              "queryRef": "DimDate.MonthYear",
+              "active": true
             }
           ]
         },
         "Y": {
           "projections": [
             {
-              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "all_measures" } }, "Property": "Sales Amount" } },
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "all_measures"
+                    }
+                  },
+                  "Property": "Sales Amount"
+                }
+              },
               "queryRef": "all_measures.Sales Amount"
             },
             {
-              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "all_measures" } }, "Property": "Sales Amount LY" } },
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "all_measures"
+                    }
+                  },
+                  "Property": "Sales Amount LY"
+                }
+              },
               "queryRef": "all_measures.Sales Amount LY"
             }
           ]

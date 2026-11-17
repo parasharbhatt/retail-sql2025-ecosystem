@@ -21,7 +21,7 @@ The project includes timestamp-aware SCD Type 2 processing, incremental fact loa
 * **Automation & BI Layer:**
   * **SQL Server Agent Job:** `DW_Nightly_Orchestration_Pipeline` runs `sp_Execute_Warehouse_Nightly_ETL` daily at **2:00 AM server-local time**.
   * **Presentation View:** `dbo.vPresentation_SalesFact` joins facts to customer and product attributes for reporting.
-  * **Power BI Project:** An Import-mode PBIP semantic model and three-page retail analytics report are in [`powerbi/`](./powerbi/).
+  * **Power BI Project:** An Import-mode PBIP semantic model and three-page retail analytics report are in [`powerbi/`](./powerbi/). The report uses a professional teal/blue theme with 14 pt visual titles and 12 pt legends and axis labels; see the [Power BI guide](./powerbi/README.md).
 
 > **Warning:** Part 1 drops and recreates `Retail_OLTP`; Part 2 drops and recreates `Retail_DW`. Re-running either script deletes all data in that database. Use them only when intentionally rebuilding the environment.
 
@@ -42,6 +42,14 @@ retail-sql2025-ecosystem/
 │   │   └── 01_sp_Execute_Warehouse_Nightly_ETL.sql  # Incremental SCD2 & temporal Fact ETL
 │   └── part4_agent_and_bi/
 │       └── 01_agent_job_and_bi_view.sql         # 2:00 AM SQL Agent job & vPresentation_SalesFact
+├── powerbi/
+│   ├── README.md                                # Power BI setup, refresh, and report guide
+│   ├── RetailSalesAnalytics.pbip
+│   ├── RetailSalesAnalytics.Report/
+│   │   ├── definition/
+│   │   └── StaticResources/RegisteredResources/
+│   │       └── RetailProfessionalTheme.json
+│   └── RetailSalesAnalytics.SemanticModel/
 ├── .gitignore
 └── README.md
 ```
@@ -54,6 +62,7 @@ retail-sql2025-ecosystem/
 2. SQL Server Agent enabled and running on an edition that supports it; required for Part 4.
 3. Visual Studio Code with the SQL Server (`mssql`) extension, or the SQL Server MCP extension, connected to the same SQL Server instance. The built-in extension connection does not require a repository `.vscode/mcp.json`.
 4. Permission to create and manage SQL Server Agent jobs in `msdb` if deploying Part 4.
+5. Power BI Desktop to open and refresh the PBIP report; report credentials are configured locally and are not stored in the repository.
 
 ---
 
@@ -100,6 +109,10 @@ ORDER BY LogDateTime DESC;
 ```
 
 `OrderDate` is derived from `OrderDateTimeUtc`; use the timestamp for time-accurate SCD version resolution. The Agent schedule is based on the SQL Server host's local time, not UTC.
+
+## Open the Power BI report
+
+After deploying the SQL layers and running the initial ETL, open [`powerbi/RetailSalesAnalytics.pbip`](./powerbi/RetailSalesAnalytics.pbip) in Power BI Desktop. Configure the local SQL Server data-source credentials and refresh the Import-mode model as needed. For model parameters, report pages, and theme details, see [`powerbi/README.md`](./powerbi/README.md).
 
 ## Re-running Scripts
 
