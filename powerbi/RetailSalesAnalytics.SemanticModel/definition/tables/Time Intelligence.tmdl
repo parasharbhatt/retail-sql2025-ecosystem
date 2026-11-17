@@ -1,0 +1,45 @@
+table 'Time Intelligence'
+    lineageTag: 8ed43883-3448-44ed-98cd-96bb9f9982d7
+    calculationGroup
+        precedence: 10
+        calculationItem 'Current' = SELECTEDMEASURE()
+            ordinal: 0
+        calculationItem MTD = CALCULATE(SELECTEDMEASURE(), DATESMTD(DimDate[Date]))
+            ordinal: 1
+        calculationItem QTD = CALCULATE(SELECTEDMEASURE(), DATESQTD(DimDate[Date]))
+            ordinal: 2
+        calculationItem YTD = CALCULATE(SELECTEDMEASURE(), DATESYTD(DimDate[Date]))
+            ordinal: 3
+        calculationItem 'Previous Year' = CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR(DimDate[Date]))
+            ordinal: 4
+        calculationItem 'YoY Change' = SELECTEDMEASURE() - CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR(DimDate[Date]))
+            ordinal: 5
+        calculationItem 'YoY %' = DIVIDE(SELECTEDMEASURE() - CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR(DimDate[Date])), CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR(DimDate[Date])))
+            formatStringExpression: "0.0%;-0.0%;0.0%"
+            ordinal: 6
+
+    column 'Time Calculation'
+        dataType: string
+        sourceColumn: Name
+        sortByColumn: Ordinal
+        summarizeBy: none
+
+    column Ordinal
+        dataType: int64
+        isHidden
+        formatString: 0
+        sourceColumn: Ordinal
+        summarizeBy: none
+
+    partition 'Time Intelligence' = calculated
+        mode: import
+        source =
+            {
+                ("Current", 0),
+                ("MTD", 1),
+                ("QTD", 2),
+                ("YTD", 3),
+                ("Previous Year", 4),
+                ("YoY Change", 5),
+                ("YoY %", 6)
+            }

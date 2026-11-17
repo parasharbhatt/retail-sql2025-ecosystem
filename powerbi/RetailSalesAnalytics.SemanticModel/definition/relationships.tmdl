@@ -1,0 +1,11 @@
+relationship a6a3bd24-d113-4d4a-9c70-4e8d33054717
+    fromColumn: FactSales.CustomerKey
+    toColumn: DimCustomers.CustomerKey
+
+relationship 41a22d1e-1b9f-455e-aab9-c80d0a6bcaa8
+    fromColumn: FactSales.ProductKey
+    toColumn: DimProducts.ProductKey
+
+relationship c953725e-4537-4cbc-ae25-43f135a0a297
+    fromColumn: FactSales.OrderDate
+    toColumn: DimDate.Date

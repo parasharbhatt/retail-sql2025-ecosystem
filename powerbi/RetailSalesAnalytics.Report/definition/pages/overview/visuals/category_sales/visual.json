@@ -1,0 +1,28 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "category_sales",
+  "position": { "x": 810, "y": 170, "z": 0, "height": 250, "width": 446 },
+  "visual": {
+    "visualType": "donutChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "DimProducts" } }, "Property": "Category" } },
+              "queryRef": "DimProducts.Category"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "all_measures" } }, "Property": "Sales Amount" } },
+              "queryRef": "all_measures.Sales Amount"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

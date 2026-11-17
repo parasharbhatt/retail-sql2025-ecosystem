@@ -1,0 +1,28 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "customers_region",
+  "position": { "x": 24, "y": 350, "z": 0, "height": 300, "width": 600 },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": { "Column": { "Expression": { "SourceRef": { "Entity": "DimCustomers" } }, "Property": "Region" } },
+              "queryRef": "DimCustomers.Region"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": { "Measure": { "Expression": { "SourceRef": { "Entity": "all_measures" } }, "Property": "Active Customers" } },
+              "queryRef": "all_measures.Active Customers"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

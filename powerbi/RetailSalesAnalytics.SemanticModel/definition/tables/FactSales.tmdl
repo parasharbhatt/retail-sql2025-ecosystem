@@ -1,0 +1,70 @@
+table FactSales
+    lineageTag: 4b47ea44-1e9d-440a-8be8-99003c8b3b82
+
+    column SalesKey
+        dataType: int64
+        isKey
+        isHidden
+        sourceColumn: SalesKey
+        summarizeBy: none
+
+    column OrderDetailID
+        dataType: int64
+        isHidden
+        sourceColumn: OrderDetailID
+        summarizeBy: none
+
+    column OrderID
+        dataType: int64
+        sourceColumn: OrderID
+        summarizeBy: none
+
+    column OrderDateTimeUtc
+        dataType: dateTime
+        isHidden
+        sourceColumn: OrderDateTimeUtc
+        summarizeBy: none
+
+    column OrderDate
+        dataType: dateTime
+        formatString: m/d/yyyy
+        sourceColumn: OrderDate
+        summarizeBy: none
+
+    column CustomerKey
+        dataType: int64
+        isHidden
+        sourceColumn: CustomerKey
+        summarizeBy: none
+
+    column ProductKey
+        dataType: int64
+        isHidden
+        sourceColumn: ProductKey
+        summarizeBy: none
+
+    column Quantity
+        dataType: int64
+        sourceColumn: Quantity
+        summarizeBy: sum
+
+    column UnitPrice
+        dataType: decimal
+        formatString: $#,0.00
+        sourceColumn: UnitPrice
+        summarizeBy: none
+
+    column SalesAmount
+        dataType: decimal
+        formatString: $#,0.00
+        sourceColumn: SalesAmount
+        summarizeBy: none
+
+    partition FactSales = m
+        mode: import
+        source =
+            let
+                Source = Sql.Database(Server, Database, [CreateNavigationProperties=false]),
+                dbo_FactSales = Source{[Schema="dbo", Item="FactSales"]}[Data]
+            in
+                dbo_FactSales

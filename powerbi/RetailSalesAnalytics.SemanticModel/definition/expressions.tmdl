@@ -1,0 +1,3 @@
+expression Server = "PB_DELL_M18" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+expression Database = "Retail_DW" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]

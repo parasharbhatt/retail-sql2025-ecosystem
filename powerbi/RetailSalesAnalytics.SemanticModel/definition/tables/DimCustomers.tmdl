@@ -1,0 +1,56 @@
+table DimCustomers
+    lineageTag: 9d8bd561-b787-45cf-b49d-9f35dfeb4034
+
+    column CustomerKey
+        dataType: int64
+        isKey
+        isHidden
+        sourceColumn: CustomerKey
+        summarizeBy: none
+
+    column CustomerID
+        dataType: int64
+        sourceColumn: CustomerID
+        summarizeBy: none
+
+    column CustomerName
+        dataType: string
+        sourceColumn: CustomerName
+        summarizeBy: none
+
+    column City
+        dataType: string
+        sourceColumn: City
+        summarizeBy: none
+
+    column Region
+        dataType: string
+        sourceColumn: Region
+        summarizeBy: none
+
+    column ValidFrom
+        dataType: dateTime
+        isHidden
+        sourceColumn: ValidFrom
+        summarizeBy: none
+
+    column ValidTo
+        dataType: dateTime
+        isHidden
+        sourceColumn: ValidTo
+        summarizeBy: none
+
+    column IsCurrent
+        dataType: boolean
+        isHidden
+        sourceColumn: IsCurrent
+        summarizeBy: none
+
+    partition DimCustomers = m
+        mode: import
+        source =
+            let
+                Source = Sql.Database(Server, Database, [CreateNavigationProperties=false]),
+                dbo_DimCustomers = Source{[Schema="dbo", Item="DimCustomers"]}[Data]
+            in
+                dbo_DimCustomers

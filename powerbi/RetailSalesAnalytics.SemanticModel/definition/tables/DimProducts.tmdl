@@ -1,0 +1,57 @@
+table DimProducts
+    lineageTag: e74b0726-7422-4c8f-a676-00bf36d75368
+
+    column ProductKey
+        dataType: int64
+        isKey
+        isHidden
+        sourceColumn: ProductKey
+        summarizeBy: none
+
+    column ProductID
+        dataType: int64
+        sourceColumn: ProductID
+        summarizeBy: none
+
+    column ProductName
+        dataType: string
+        sourceColumn: ProductName
+        summarizeBy: none
+
+    column Category
+        dataType: string
+        sourceColumn: Category
+        summarizeBy: none
+
+    column ListPrice
+        dataType: decimal
+        formatString: $#,0.00
+        sourceColumn: ListPrice
+        summarizeBy: none
+
+    column ValidFrom
+        dataType: dateTime
+        isHidden
+        sourceColumn: ValidFrom
+        summarizeBy: none
+
+    column ValidTo
+        dataType: dateTime
+        isHidden
+        sourceColumn: ValidTo
+        summarizeBy: none
+
+    column IsCurrent
+        dataType: boolean
+        isHidden
+        sourceColumn: IsCurrent
+        summarizeBy: none
+
+    partition DimProducts = m
+        mode: import
+        source =
+            let
+                Source = Sql.Database(Server, Database, [CreateNavigationProperties=false]),
+                dbo_DimProducts = Source{[Schema="dbo", Item="DimProducts"]}[Data]
+            in
+                dbo_DimProducts

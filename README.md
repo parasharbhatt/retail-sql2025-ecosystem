@@ -2,7 +2,11 @@
 
 # SQL Server 2025 Retail OLTP & Data Warehouse Ecosystem
 
-A SQL Server 2025 reference implementation of a retail **OLTP (`Retail_OLTP`)** database and a **Kimball star-schema data warehouse (`Retail_DW`)**. The project includes timestamp-aware SCD Type 2 processing, incremental fact loading, SQL Server Agent scheduling, and a reporting view.
+A SQL Server 2025 reference implementation of a retail **OLTP (`Retail_OLTP`)** database and a **Kimball star-schema data warehouse (`Retail_DW`)**. 
+
+The project includes timestamp-aware SCD Type 2 processing, incremental fact loading, SQL Server Agent scheduling, and a reporting view.
+
+
 
 ---
 
@@ -17,6 +21,7 @@ A SQL Server 2025 reference implementation of a retail **OLTP (`Retail_OLTP`)** 
 * **Automation & BI Layer:**
   * **SQL Server Agent Job:** `DW_Nightly_Orchestration_Pipeline` runs `sp_Execute_Warehouse_Nightly_ETL` daily at **2:00 AM server-local time**.
   * **Presentation View:** `dbo.vPresentation_SalesFact` joins facts to customer and product attributes for reporting.
+  * **Power BI Project:** An Import-mode PBIP semantic model and three-page retail analytics report are in [`powerbi/`](./powerbi/).
 
 > **Warning:** Part 1 drops and recreates `Retail_OLTP`; Part 2 drops and recreates `Retail_DW`. Re-running either script deletes all data in that database. Use them only when intentionally rebuilding the environment.
 

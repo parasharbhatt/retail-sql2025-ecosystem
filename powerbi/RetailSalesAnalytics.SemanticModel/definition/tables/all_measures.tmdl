@@ -1,0 +1,56 @@
+table all_measures
+    lineageTag: 7ed5ec68-5f5e-43f2-b022-0f38e48b87d7
+
+    measure 'Sales Amount' = SUM(FactSales[SalesAmount])
+        formatString: $#,0.00
+        displayFolder: Basic Measures
+
+    measure 'Total Quantity' = SUM(FactSales[Quantity])
+        formatString: #,0
+        displayFolder: Basic Measures
+
+    measure Orders = DISTINCTCOUNT(FactSales[OrderID])
+        formatString: #,0
+        displayFolder: Basic Measures
+
+    measure 'Average Order Value' = DIVIDE([Sales Amount], [Orders])
+        formatString: $#,0.00
+        displayFolder: Basic Measures
+
+    measure 'Average Selling Price' = DIVIDE([Sales Amount], [Total Quantity])
+        formatString: $#,0.00
+        displayFolder: Basic Measures
+
+    measure 'Active Customers' = DISTINCTCOUNT(DimCustomers[CustomerID])
+        formatString: #,0
+        displayFolder: Basic Measures
+
+    measure 'Sales Amount LY' = CALCULATE([Sales Amount], SAMEPERIODLASTYEAR(DimDate[Date]))
+        formatString: $#,0.00
+        displayFolder: Advanced Measures
+
+    measure 'Sales YoY Change' = [Sales Amount] - [Sales Amount LY]
+        formatString: $#,0.00
+        displayFolder: Advanced Measures
+
+    measure 'Sales YoY %' = DIVIDE([Sales YoY Change], [Sales Amount LY])
+        formatString: 0.0%;-0.0%;0.0%
+        displayFolder: Advanced Measures
+
+    measure 'Sales YTD' = TOTALYTD([Sales Amount], DimDate[Date])
+        formatString: $#,0.00
+        displayFolder: Advanced Measures
+
+    measure 'Orders YTD' = TOTALYTD([Orders], DimDate[Date])
+        formatString: #,0
+        displayFolder: Advanced Measures
+
+    column Placeholder
+        dataType: string
+        isHidden
+        sourceColumn: Placeholder
+        summarizeBy: none
+
+    partition all_measures = calculated
+        mode: import
+        source = ROW("Placeholder", "Measures")
