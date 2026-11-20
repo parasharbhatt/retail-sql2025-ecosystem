@@ -6,6 +6,14 @@ A SQL Server 2025 reference implementation of a retail **OLTP (`Retail_OLTP`)** 
 
 The project includes timestamp-aware SCD Type 2 processing, incremental fact loading, SQL Server Agent scheduling, and a reporting view.
 
+## Project Category
+
+`Data Engineering` `Data Warehouse` `Retail Analytics` `OLTP` `Business Intelligence` `ETL`
+
+## Tools Used
+
+`SQL Server 2025` `T-SQL` `SQL Server Agent` `Power BI` `VS Code` `MSSQL Extension` `SQL Server MCP`
+
 
 
 ---
